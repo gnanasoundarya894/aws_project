@@ -1,0 +1,130 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Shopping Cart</title>
+    <style>
+        /* This CSS is inside the file to ensure it works 100% */
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            color: #333;
+        }
+        .navbar {
+            background-color: #2c3e50;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .navbar a { color: white; text-decoration: none; margin-left: 20px; font-weight: 500; }
+        
+        .container {
+            max-width: 1000px;
+            margin: 50px auto; /* This centers the content */
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            border-radius: 4px 4px 0 0;
+        }
+        td {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+        .price-text {
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .btn-remove {
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .btn-checkout {
+            background-color: #e67e22;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            float: right;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div style="font-size: 1.5rem; font-weight: bold;">Book Store</div>
+        <div>
+            <a href="/">Home</a>
+            <a href="/books">Browse Books</a>
+            <a href="/cart">Cart</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Your Shopping Cart</h1>
+
+        {% if items %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book Details</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <img src="{{ item.img }}" style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px;">
+                                <div>
+                                    <strong>{{ item.title }}</strong><br>
+                                    <small style="color: #666;">{{ item.author }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="price-text">₹{{ item.price }}</td>
+                        <td>
+                            <a href="{{ url_for('remove_from_cart', index=loop.index0) }}" class="btn-remove">Remove</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div style="overflow: hidden; margin-top: 20px;">
+                <h2 style="float: right; color: #27ae60;">Total: ₹{{ total }}</h2>
+                <div style="clear: both;"></div>
+                <a href="/checkout" class="btn-checkout">Proceed to Checkout</a>
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 50px;">
+                <p>Your cart is empty.</p>
+                <a href="/books" style="color: #e67e22;">Start Shopping</a>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

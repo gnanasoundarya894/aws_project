@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice - Book Store</title>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; background-color: #f0f0f0; margin: 0; padding: 20px; }
+        
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            font-size: 16px;
+            line-height: 24px;
+            background: #fff;
+            color: #555;
+        }
+
+        .invoice-header { display: flex; justify-content: space-between; margin-bottom: 40px; border-bottom: 2px solid #333; padding-bottom: 20px; }
+        
+        .company-info h1 { margin: 0; color: #2c3e50; font-size: 28px; }
+        
+        .customer-info { margin-bottom: 40px; display: flex; justify-content: space-between; }
+        
+        table { width: 100%; line-height: inherit; text-align: left; border-collapse: collapse; }
+        
+        th { background: #f9f9f9; border-bottom: 1px solid #ddd; font-weight: bold; padding: 10px; }
+        
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+        
+        .total-section { text-align: right; margin-top: 30px; }
+        
+        .total-amount { font-size: 24px; font-weight: bold; color: #27ae60; }
+        
+        .btn-group { margin-top: 30px; text-align: center; }
+        .btn { padding: 10px 20px; text-decoration: none; color: white; border-radius: 5px; margin: 5px; cursor: pointer; border: none; }
+        .btn-print { background: #34495e; }
+        .btn-home { background: #e67e22; }
+
+        @media print { .btn-group { display: none; } }
+    </style>
+</head>
+<body>
+
+<div class="invoice-box">
+    <div class="invoice-header">
+        <div class="company-info">
+            <h1>BOOK STORE</h1>
+            <p>123 Education Lane, Knowledge City<br>GSTIN: 22AAAAA0000A1Z5</p>
+        </div>
+        <div style="text-align: right;">
+            <p><strong>Invoice #:</strong> {{ order_id if order_id else '10245' }}<br>
+               <strong>Date:</strong> 30 Jan 2026</p>
+        </div>
+    </div>
+
+    <div class="customer-info">
+        <div>
+            <strong>BILL TO:</strong><br>
+            {{ user_name if user_name else 'Guest User' }}<br>
+            {{ address if address else 'No address provided' }}<br>
+            Phone: +91 98765 43210
+        </div>
+        <div style="text-align: right;">
+            <strong>PAYMENT STATUS:</strong><br>
+            <span style="color: green;">PAID</span><br>
+            Method: Credit Card / UPI
+        </div>
+    </div>
+
+    
+
+    <table>
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Author</th>
+                <th style="text-align: right;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.title }}</td>
+                <td>{{ item.author }}</td>
+                <td style="text-align: right;">₹{{ item.price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="total-section">
+        <p>Subtotal: ₹{{ total }}</p>
+        <p>Tax (0%): ₹0.00</p>
+        <hr>
+        <p class="total-amount">Grand Total: ₹{{ total }}</p>
+    </div>
+
+    <div style="margin-top: 50px; font-style: italic; font-size: 12px; text-align: center;">
+        This is a computer-generated invoice and does not require a signature.
+    </div>
+
+    <div class="btn-group">
+        <button onclick="window.print()" class="btn btn-print">Print Bill</button>
+        <a href="/" class="btn btn-home">Continue Shopping</a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Tax Invoice - Book Store</title>
+    <style>
+        body { font-family: 'Courier New', monospace; background: #f0f0f0; padding: 20px; }
+        .bill-container { max-width: 700px; margin: auto; background: white; padding: 40px; border: 1px solid #ddd; }
+        .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+        .info-section { display: flex; justify-content: space-between; margin-bottom: 30px; line-height: 1.6; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th { text-align: left; border-bottom: 2px solid #333; padding: 10px; background: #f9f9f9; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+        .total-box { text-align: right; margin-top: 20px; font-size: 1.2rem; }
+        .btn-print { background: #2c3e50; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px; text-decoration: none; }
+        @media print { .no-print { display: none; } }
+    </style>
+</head>
+<body>
+
+    <div class="bill-container">
+        <div class="header">
+            <h1>BOOK STORE RECEIPT</h1>
+            <p>123 Knowledge Park, New Delhi, India</p>
+        </div>
+
+        <div class="info-section">
+            <div>
+                <strong>BILL TO:</strong><br>
+                {{ name }}<br>
+                {{ address }}
+            </div>
+            <div style="text-align: right;">
+                <strong>Invoice:</strong> {{ invoice_no }}<br>
+                <strong>Date:</strong> 30-Jan-2026<br>
+                <strong>Payment:</strong> {{ method }}
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Book Title</th>
+                    <th style="text-align: right;">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.title }}<br><small>Author: {{ item.author }}</small></td>
+                    <td style="text-align: right;">₹{{ item.price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total-box">
+            <p>Subtotal: ₹{{ total }}</p>
+            <p>Tax (GST 0%): ₹0.00</p>
+            <h2 style="color: #27ae60;">Grand Total: ₹{{ total }}</h2>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px; font-style: italic;">Thank you for shopping with us!</p>
+
+        <div class="no-print" style="text-align: center; margin-top: 20px;">
+            <button onclick="window.print()" class="btn-print">Print Receipt</button>
+            <a href="/" class="btn-print" style="background: #e67e22;">Back to Home</a>
+        </div>
+    </div>
+
+</body>
+</html>

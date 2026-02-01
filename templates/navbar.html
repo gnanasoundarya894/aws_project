@@ -1,0 +1,14 @@
+ <nav>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('books') }}">Books</a>
+    
+    {% if session.get('user') == 'admin' %}
+        <a href="{{ url_for('admin') }}" style="color: red; font-weight: bold;">Admin Dashboard</a>
+    {% endif %}
+
+    {% if session.get('user') %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+</nav>

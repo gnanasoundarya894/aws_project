@@ -1,0 +1,75 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to TechBooks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">TechBooks</div>
+        <div class="nav-links">
+            <a href="/books">Browse Store</a>
+            
+            {% if not session.get('user') %}
+                <a href="/login">Student Login</a>
+                <a href="/adminlogin" style="border-left: 1px solid #444; padding-left: 15px; color: #ffcc00;">Admin Login</a>
+                <a href="/register" class="btn-nav">Register</a>
+            {% else %}
+                {% if session.get('user') == 'admin' %}
+                    <a href="/admin" style="color: #ffcc00; font-weight: bold;">Admin Dashboard</a>
+                {% else %}
+                    <a href="/account">My Account</a>
+                {% endif %}
+                <a href="/logout">Logout</a>
+            {% endif %}
+            
+            <a href="/cart">Cart ({{ session.get('cart', [])|length }})</a>
+        </div>
+    </div>
+</nav>
+
+<header class="hero">
+    <div class="hero-content">
+        <h1>Master Your Craft with the Best <span class="highlight">Technical Books</span></h1>
+        <p>From Algorithms to Web Design, elevate your coding journey with our curated collection.</p>
+        <div class="hero-btns">
+            <a href="/books" class="btn btn-primary">Start Browsing</a>
+            <a href="/register" class="btn btn-secondary">Join Community</a>
+        </div>
+    </div>
+</header>
+
+<section class="container">
+    <h2 class="section-title">Explore Popular Categories</h2>
+    <div class="category-grid">
+        <div class="category-card" onclick="location.href='/books?search=Java'">
+            <div class="category-icon">☕</div>
+            <h3>Java & Backend</h3>
+            <p>Master enterprise-level development.</p>
+        </div>
+
+        <div class="category-card" onclick="location.href='/books?search=CSS'">
+            <div class="category-icon">🎨</div>
+            <h3>Frontend & UI/UX</h3>
+            <p>Create stunning web interfaces.</p>
+        </div>
+
+        <div class="category-card" onclick="location.href='/books?search=DSA'">
+            <div class="category-icon">🧩</div>
+            <h3>DSA & Logic</h3>
+            <p>Crack your next technical interview.</p>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>&copy; 2026 TechBooks Store. Built for Developers.</p>
+</footer>
+
+</body>
+</html>

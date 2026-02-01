@@ -1,0 +1,145 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Collection - Book Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Normal Bookstore Styling */
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        .book-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; 
+            margin-top: 30px; 
+        }
+
+        .book-card { 
+            background: #ffffff; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-card:hover { transform: translateY(-5px); }
+
+        .book-img { width: 100%; height: 320px; object-fit: cover; }
+
+        .book-details { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+
+        .book-title { font-size: 1.25rem; margin-bottom: 5px; color: #2c3e50; }
+        .book-author { color: #7f8c8d; font-style: italic; margin-bottom: 15px; }
+        
+        /* Separate Price & Buy Section */
+        .purchase-section { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px;
+        }
+        .price-tag { font-size: 1.4rem; font-weight: bold; color: #27ae60; }
+
+        /* Separate Wishlist Section */
+        .wishlist-section { 
+            border-top: 1px solid #eee; 
+            padding: 10px 0; 
+            text-align: center;
+        }
+        .wishlist-link { color: #e74c3c; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+        .wishlist-link:hover { text-decoration: underline; }
+
+        /* Separate Review Section */
+        .review-section { 
+            background: #f9f9f9; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-top: auto; 
+        }
+        .review-item { font-size: 0.85rem; border-bottom: 1px solid #ddd; padding: 5px 0; }
+        .stars { color: #f1c40f; }
+
+        .review-form input { 
+            width: 100%; padding: 8px; margin-top: 5px; 
+            border: 1px solid #ddd; border-radius: 4px; font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo" style="font-weight: bold; font-size: 1.5rem;">📚 TechBooks</div>
+        <form action="/books" method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Search by title or author..." value="{{ request.args.get('search', '') }}">
+            <button type="submit">Search</button>
+        </form>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/account">My Account</a>
+            <a href="/cart">Cart ({{ session.get('cart', [])|length }})</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1 style="text-align: center; margin-bottom: 40px; color: #34495e;">Browse Our Collection</h1>
+
+    <div class="book-grid">
+        {% for item in books %}
+        <div class="book-card">
+            <img src="{{ item.details.img }}" class="book-img" alt="Book Cover">
+            
+            <div class="book-details">
+                <h3 class="book-title">{{ item.details.title }}</h3>
+                <p class="book-author">by {{ item.details.author }}</p>
+
+                <div class="purchase-section">
+                    <span class="price-tag">₹{{ "{:,.2f}".format(item.details.price) }}</span>
+                    <a href="{{ url_for('add_to_cart', book_id=item.details.id) }}" class="btn">Buy Now</a>
+                </div>
+
+                <div class="wishlist-section">
+                    <a href="{{ url_for('add_to_wishlist', book_id=item.details.id) }}" class="wishlist-link">
+                        ❤ Save to Wishlist
+                    </a>
+                </div>
+
+                <div class="review-section">
+                    <strong style="font-size: 0.9rem;">Customer Reviews:</strong>
+                    <div style="max-height: 80px; overflow-y: auto; margin: 10px 0;">
+                        {% if item.reviews %}
+                            {% for rev in item.reviews %}
+                            <div class="review-item">
+                                <span class="stars">{{ "★" * rev.rating }}</span>
+                                <span style="color: #555;">"{{ rev.comment }}"</span>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p style="font-size: 0.8rem; color: #999;">No reviews yet.</p>
+                        {% endif %}
+                    </div>
+
+                    <form action="/submit_review/{{ item.details.id }}" method="POST" class="review-form">
+                        <select name="rating" style="width: 100%; padding: 5px; font-size: 0.8rem;">
+                            <option value="5">5 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="3">3 Stars</option>
+                        </select>
+                        <input type="text" name="comment" placeholder="Write a review..." required>
+                        <button type="submit" style="width: 100%; margin-top: 5px; font-size: 0.75rem; background: #34495e;">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>
