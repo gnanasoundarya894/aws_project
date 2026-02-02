@@ -34,7 +34,39 @@
         </div>
 
         <div class="admin-table-container">
-            <h3>Current Inventory</h3>
+            <h3 style="margin-top: 0;">Customer Orders & Shipping</h3>
+            <div style="overflow-x: auto; margin-bottom: 40px;">
+                <table class="admin-table">
+                    <thead>
+                        <tr style="background-color: #f4f4f4;">
+                            <th>Invoice No</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Shipping Address</th>
+                            <th>Payment</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td><strong>{{ order.invoice_no }}</strong></td>
+                            <td>{{ order.username }}</td>
+                            <td style="font-size: 0.85em;">{{ order.items }}</td>
+                            <td>₹{{ "{:,.2f}".format(order.total) }}</td>
+                            <td style="color: #555;">{{ order.address }}</td>
+                            <td><span class="badge">{{ order.method }}</span></td>
+                            <td>{{ order.date }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+
+            <h3 style="margin-top: 20px;">Current Inventory</h3>
             <table class="admin-table">
                 <thead>
                     <tr>

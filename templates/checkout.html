@@ -8,8 +8,8 @@
         function togglePayment() {
             const method = document.getElementById("payment_method").value;
             const cardDetails = document.getElementById("card-details");
-            // Hide card info if COD is selected
-            cardDetails.style.display = (method === "cod") ? "none" : "block";
+            // Match the value "Cash on Delivery" exactly as it appears in the option
+            cardDetails.style.display = (method === "Cash on Delivery") ? "none" : "block";
         }
     </script>
 </head>
@@ -21,12 +21,17 @@
     </nav>
 
     <div class="container">
-        <div class="card-panel" style="max-width: 500px; margin: auto;">
-            <h2>Complete Your Order</h2>
+        <div class="card-panel" style="max-width: 500px; margin: 50px auto; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <h2 style="text-align: center; margin-bottom: 30px;">Complete Your Order</h2>
+            
             <form action="{{ url_for('success') }}" method="POST">
                 
                 <label>Full Name (for Receipt)</label>
                 <input type="text" name="name" placeholder="Enter your full name" required 
+                       style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px;">
+
+                <label>Email Address</label>
+                <input type="email" name="email" placeholder="email@example.com" required 
                        style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px;">
 
                 <label>Delivery Address</label>
@@ -36,13 +41,13 @@
                 <label>Select Payment Method</label>
                 <select name="payment_method" id="payment_method" onchange="togglePayment()" 
                         style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px;">
-                    <option value="Online Payment">Online Payment (Card)</option>
+                    <option value="Online Payment">Online Payment (Card / UPI)</option>
                     <option value="Cash on Delivery">Cash on Delivery (COD)</option>
                 </select>
 
                 <div id="card-details">
-                    <label>Card Number</label>
-                    <input type="text" placeholder="1234 5678 9101 1121" 
+                    <label>Card Details</label>
+                    <input type="text" placeholder="Card Number" 
                            style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
                     
                     <div style="display: flex; gap: 10px;">
@@ -51,7 +56,9 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn" style="width: 100%; margin-top: 20px; padding: 15px;">Place Order & View Receipt</button>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 30px; padding: 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">
+                    Place Order & View Receipt
+                </button>
             </form>
         </div>
     </div>

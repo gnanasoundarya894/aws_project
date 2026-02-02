@@ -1,10 +1,9 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
     <title>Invoice - Book Store</title>
     <style>
         body { font-family: 'Courier New', Courier, monospace; background-color: #f0f0f0; margin: 0; padding: 20px; }
-        
         .invoice-box {
             max-width: 800px;
             margin: auto;
@@ -16,28 +15,18 @@
             background: #fff;
             color: #555;
         }
-
         .invoice-header { display: flex; justify-content: space-between; margin-bottom: 40px; border-bottom: 2px solid #333; padding-bottom: 20px; }
-        
         .company-info h1 { margin: 0; color: #2c3e50; font-size: 28px; }
-        
         .customer-info { margin-bottom: 40px; display: flex; justify-content: space-between; }
-        
         table { width: 100%; line-height: inherit; text-align: left; border-collapse: collapse; }
-        
         th { background: #f9f9f9; border-bottom: 1px solid #ddd; font-weight: bold; padding: 10px; }
-        
         td { padding: 10px; border-bottom: 1px solid #eee; }
-        
         .total-section { text-align: right; margin-top: 30px; }
-        
         .total-amount { font-size: 24px; font-weight: bold; color: #27ae60; }
-        
         .btn-group { margin-top: 30px; text-align: center; }
-        .btn { padding: 10px 20px; text-decoration: none; color: white; border-radius: 5px; margin: 5px; cursor: pointer; border: none; }
+        .btn { padding: 10px 20px; text-decoration: none; color: white; border-radius: 5px; margin: 5px; cursor: pointer; border: none; display: inline-block; }
         .btn-print { background: #34495e; }
         .btn-home { background: #e67e22; }
-
         @media print { .btn-group { display: none; } }
     </style>
 </head>
@@ -50,26 +39,28 @@
             <p>123 Education Lane, Knowledge City<br>GSTIN: 22AAAAA0000A1Z5</p>
         </div>
         <div style="text-align: right;">
-            <p><strong>Invoice #:</strong> {{ order_id if order_id else '10245' }}<br>
-               <strong>Date:</strong> 30 Jan 2026</p>
+            <p><strong>Invoice #:</strong> {{ invoice_no }}<br>
+               <strong>Date:</strong> 02 Feb 2026</p>
         </div>
     </div>
 
     <div class="customer-info">
         <div>
             <strong>BILL TO:</strong><br>
-            {{ user_name if user_name else 'Guest User' }}<br>
-            {{ address if address else 'No address provided' }}<br>
+            {{ name }}<br>
+            {{ address }}<br>
             Phone: +91 98765 43210
         </div>
         <div style="text-align: right;">
             <strong>PAYMENT STATUS:</strong><br>
-            <span style="color: green;">PAID</span><br>
-            Method: Credit Card / UPI
+            {% if method == 'Cash on Delivery' %}
+                <span style="color: #e67e22;">PENDING (COD)</span><br>
+            {% else %}
+                <span style="color: green;">PAID</span><br>
+            {% endif %}
+            Method: {{ method }}
         </div>
     </div>
-
-    
 
     <table>
         <thead>
@@ -103,7 +94,7 @@
 
     <div class="btn-group">
         <button onclick="window.print()" class="btn btn-print">Print Bill</button>
-        <a href="/" class="btn btn-home">Continue Shopping</a>
+        <a href="/books" class="btn btn-home">Continue Shopping</a>
     </div>
 </div>
 

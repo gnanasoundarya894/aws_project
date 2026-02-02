@@ -6,15 +6,49 @@
     <title>Our Collection - Book Store</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        /* Normal Bookstore Styling */
         body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
         
+        /* LAYOUT WRAPPER */
+        .main-layout {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        /* SIDEBAR STYLES */
+        .sidebar {
+            width: 250px;
+            min-width: 250px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            height: fit-content;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 20px;
+        }
+
+        .sidebar h3 { font-size: 1.1rem; margin-bottom: 15px; color: #2c3e50; border-bottom: 2px solid #e67e22; padding-bottom: 5px; }
+        .category-link {
+            display: block;
+            padding: 10px 12px;
+            color: #555;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: 0.2s;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        .category-link:hover { background: #fff3e0; color: #e67e22; }
+        .category-link.active { background: #e67e22; color: white; }
+
+        /* UPDATED GRID */
         .book-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
             gap: 25px; 
-            margin-top: 30px; 
+            flex-grow: 1;
         }
 
         .book-card { 
@@ -28,56 +62,59 @@
         }
 
         .book-card:hover { transform: translateY(-5px); }
-
         .book-img { width: 100%; height: 320px; object-fit: cover; }
-
-        .book-details { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .book-details { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
 
         .book-title { font-size: 1.25rem; margin-bottom: 5px; color: #2c3e50; }
-        .book-author { color: #7f8c8d; font-style: italic; margin-bottom: 15px; }
+        .book-author { color: #7f8c8d; font-style: italic; margin-bottom: 10px; }
+
+        .category-tag {
+            display: inline-block;
+            background: #e67e22;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-bottom: 10px;
+            width: fit-content;
+        }
+        .info-text { font-size: 0.85rem; color: #555; margin: 2px 0; }
+        .description-box {
+            font-size: 0.85rem;
+            color: #666;
+            background: #fdfdfd;
+            border-left: 3px solid #e67e22;
+            padding: 8px;
+            margin: 10px 0;
+            line-height: 1.4;
+        }
+        .stock-badge { font-weight: bold; font-size: 0.85rem; margin-bottom: 15px; }
         
-        /* Separate Price & Buy Section */
-        .purchase-section { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 20px;
-        }
+        .purchase-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .price-tag { font-size: 1.4rem; font-weight: bold; color: #27ae60; }
-
-        /* Separate Wishlist Section */
-        .wishlist-section { 
-            border-top: 1px solid #eee; 
-            padding: 10px 0; 
-            text-align: center;
-        }
+        .wishlist-section { border-top: 1px solid #eee; padding: 10px 0; text-align: center; }
         .wishlist-link { color: #e74c3c; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
-        .wishlist-link:hover { text-decoration: underline; }
-
-        /* Separate Review Section */
-        .review-section { 
-            background: #f9f9f9; 
-            padding: 15px; 
-            border-radius: 8px; 
-            margin-top: auto; 
-        }
+        .review-section { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 15px; }
         .review-item { font-size: 0.85rem; border-bottom: 1px solid #ddd; padding: 5px 0; }
         .stars { color: #f1c40f; }
-
-        .review-form input { 
-            width: 100%; padding: 8px; margin-top: 5px; 
-            border: 1px solid #ddd; border-radius: 4px; font-size: 0.8rem;
-        }
+        .btn { background: #e67e22; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; }
+        .btn-disabled { background: #ccc !important; cursor: not-allowed !important; }
+        
+        /* NAVBAR FIX */
+        .navbar { background: #2c3e50; padding: 15px 0; color: white; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        .search-form input { padding: 8px; border-radius: 4px; border: none; width: 300px; }
+        .nav-links a { color: white; margin-left: 20px; text-decoration: none; }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
     <div class="nav-container">
-        <div class="logo" style="font-weight: bold; font-size: 1.5rem;">📚 TechBooks</div>
+        <div class="logo">📚 TechBooks</div>
         <form action="/books" method="GET" class="search-form">
-            <input type="text" name="search" placeholder="Search by title or author..." value="{{ request.args.get('search', '') }}">
-            <button type="submit">Search</button>
+            <input type="text" name="search" placeholder="Search title or author..." value="{{ request.args.get('search', '') }}">
+            <button type="submit" style="padding: 8px; background: #e67e22; color: white; border: none; border-radius: 4px; cursor: pointer;">Search</button>
         </form>
         <div class="nav-links">
             <a href="/">Home</a>
@@ -90,56 +127,85 @@
 <div class="container">
     <h1 style="text-align: center; margin-bottom: 40px; color: #34495e;">Browse Our Collection</h1>
 
-    <div class="book-grid">
-        {% for item in books %}
-        <div class="book-card">
-            <img src="{{ item.details.img }}" class="book-img" alt="Book Cover">
-            
-            <div class="book-details">
-                <h3 class="book-title">{{ item.details.title }}</h3>
-                <p class="book-author">by {{ item.details.author }}</p>
+    <div class="main-layout">
+        <aside class="sidebar">
+            <h3>Categories</h3>
+            <a href="/books" class="category-link {% if not request.args.get('category') %}active{% endif %}">All Collections</a>
+            <a href="/books?category=Fiction" class="category-link">Fiction</a>
+            <a href="/books?category=Non-fiction" class="category-link">Non-fiction</a>
+            <a href="/books?category=Educational" class="category-link">Educational / Tech</a>
+            <a href="/books?category=Comics" class="category-link">Comics</a>
+            <a href="/books?category=Competitive exam books" class="category-link">Exam Prep</a>
+        </aside>
 
-                <div class="purchase-section">
-                    <span class="price-tag">₹{{ "{:,.2f}".format(item.details.price) }}</span>
-                    <a href="{{ url_for('add_to_cart', book_id=item.details.id) }}" class="btn">Buy Now</a>
-                </div>
-
-                <div class="wishlist-section">
-                    <a href="{{ url_for('add_to_wishlist', book_id=item.details.id) }}" class="wishlist-link">
-                        ❤ Save to Wishlist
-                    </a>
-                </div>
-
-                <div class="review-section">
-                    <strong style="font-size: 0.9rem;">Customer Reviews:</strong>
-                    <div style="max-height: 80px; overflow-y: auto; margin: 10px 0;">
-                        {% if item.reviews %}
-                            {% for rev in item.reviews %}
-                            <div class="review-item">
-                                <span class="stars">{{ "★" * rev.rating }}</span>
-                                <span style="color: #555;">"{{ rev.comment }}"</span>
-                            </div>
-                            {% endfor %}
-                        {% else %}
-                            <p style="font-size: 0.8rem; color: #999;">No reviews yet.</p>
-                        {% endif %}
+        <div class="book-grid">
+            {% for item in books %}
+            <div class="book-card">
+                <img src="{{ item.details.img }}" class="book-img" alt="Book Cover">
+                
+                <div class="book-details">
+                    <div>
+                        <span class="category-tag">{{ item.details.category }}</span>
+                        <h3 class="book-title">{{ item.details.title }}</h3>
+                        <p class="book-author">by {{ item.details.author }}</p>
+                        <p class="info-text"><strong>Publisher:</strong> {{ item.details.publisher }}</p>
+                        <div class="description-box">{{ item.details.description }}</div>
                     </div>
 
-                    <form action="/submit_review/{{ item.details.id }}" method="POST" class="review-form">
-                        <select name="rating" style="width: 100%; padding: 5px; font-size: 0.8rem;">
-                            <option value="5">5 Stars</option>
-                            <option value="4">4 Stars</option>
-                            <option value="3">3 Stars</option>
-                        </select>
-                        <input type="text" name="comment" placeholder="Write a review..." required>
-                        <button type="submit" style="width: 100%; margin-top: 5px; font-size: 0.75rem; background: #34495e;">Submit</button>
-                    </form>
+                    <div>
+                        <div class="stock-badge">
+                            {% if item.details.stock > 0 %}
+                                <span style="color: #27ae60;">✔ In Stock ({{ item.details.stock }})</span>
+                            {% else %}
+                                <span style="color: #e74c3c;">✖ Out of Stock</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="purchase-section">
+                            <span class="price-tag">₹{{ "{:,.2f}".format(item.details.price) }}</span>
+                            {% if item.details.stock > 0 %}
+                                <a href="{{ url_for('add_to_cart', book_id=item.details.id) }}" class="btn">Buy Now</a>
+                            {% else %}
+                                <button class="btn btn-disabled" disabled>Unavailable</button>
+                            {% endif %}
+                        </div>
+
+                        <div class="wishlist-section">
+                            <a href="{{ url_for('add_to_wishlist', book_id=item.details.id) }}" class="wishlist-link">❤ Save to Wishlist</a>
+                        </div>
+
+                        <div class="review-section">
+                            <strong>Reviews:</strong>
+                            <div style="max-height: 80px; overflow-y: auto; margin: 10px 0;">
+                                {% if item.reviews %}
+                                    {% for rev in item.reviews %}
+                                    <div class="review-item">
+                                        <span class="stars">{{ "★" * rev.rating }}</span>
+                                        <span style="color: #555;">"{{ rev.comment }}"</span>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p style="font-size: 0.8rem; color: #999;">No reviews yet.</p>
+                                {% endif %}
+                            </div>
+
+                            <form action="/submit_review/{{ item.details.id }}" method="POST">
+                                <select name="rating" style="width: 100%; margin-bottom: 5px;">
+                                    <option value="5">5 Stars</option>
+                                    <option value="4">4 Stars</option>
+                                    <option value="3">3 Stars</option>
+                                </select>
+                                <input type="text" name="comment" placeholder="Write a review..." required style="width: 100%; padding: 5px; margin-bottom: 5px; box-sizing: border-box;">
+                                <button type="submit" style="width: 100%; background: #34495e; color: white; border: none; padding: 5px; border-radius: 4px; cursor: pointer;">Post</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </div>   
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
 
-</body>
+</body>   
 </html>
