@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to TechBooks</title>
+    <title>Welcome to The Book Hub</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -11,7 +11,7 @@
 
 <nav class="navbar">
     <div class="nav-container">
-        <div class="logo">TechBooks</div>
+        <div class="logo">The Book Hub</div>
         <div class="nav-links">
             <a href="/books">Browse Store</a>
             
@@ -35,8 +35,8 @@
 
 <header class="hero">
     <div class="hero-content">
-        <h1>Master Your Craft with the Best <span class="highlight">Technical Books</span></h1>
-        <p>From Algorithms to Web Design, elevate your coding journey with our curated collection.</p>
+        <h1>Find Your Next Great Read at <span class="highlight">The Book Hub</span></h1>
+        <p>From Fiction to Exam Prep, explore our curated collection of essential titles.</p>
         <div class="hero-btns">
             <a href="/books" class="btn btn-primary">Start Browsing</a>
             <a href="/register" class="btn btn-secondary">Join Community</a>
@@ -47,28 +47,28 @@
 <section class="container">
     <h2 class="section-title">Explore Popular Categories</h2>
     <div class="category-grid">
-        <div class="category-card" onclick="location.href='/books?search=Java'">
-            <div class="category-icon">☕</div>
-            <h3>Java & Backend</h3>
-            <p>Master enterprise-level development.</p>
+        <div class="category-card" onclick="location.href='/books?category=Fiction'">
+            <div class="category-icon">📖</div>
+            <h3>Fiction & Stories</h3>
+            <p>Explore novels and classic tales.</p>
         </div>
 
-        <div class="category-card" onclick="location.href='/books?search=CSS'">
-            <div class="category-icon">🎨</div>
-            <h3>Frontend & UI/UX</h3>
-            <p>Create stunning web interfaces.</p>
+        <div class="category-card" onclick="location.href='/books?category=Educational'">
+            <div class="category-icon">💻</div>
+            <h3>Tech & Learning</h3>
+            <p>Master new skills and programming.</p>
         </div>
 
-        <div class="category-card" onclick="location.href='/books?search=DSA'">
-            <div class="category-icon">🧩</div>
-            <h3>DSA & Logic</h3>
-            <p>Crack your next technical interview.</p>
+        <div class="category-card" onclick="location.href='/books?category=Exam Prep'">
+            <div class="category-icon">📝</div>
+            <h3>Exam Prep</h3>
+            <p>Study guides and test materials.</p>
         </div>
     </div>
 </section>
 
 <footer class="footer">
-    <p>&copy; 2026 TechBooks Store. Built for Developers.</p>
+    <p>&copy; 2026 The Book Hub. Your Complete Online Bookstore.</p>
 </footer>
 
 </body>
