@@ -1,4 +1,4 @@
- from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import boto3
 import uuid
 import random
@@ -22,7 +22,7 @@ reviews_table = dynamodb.Table('Reviews')
 users_table = dynamodb.Table('Users')
 
 # SNS Topic
-SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:604665149129:aws_capstone_topic' 
+SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:396913721135:bookbazaar' 
 
 def send_notification(subject, message):
     try:
@@ -38,9 +38,8 @@ def login():
         email = request.form.get('email').strip()
         password = request.form.get('password').strip()
         
-        response = users_table.get_item(Key={'email': email})
+        response = users_table.get_item(Key={'username':email})
         user = response.get('Item')
-
         if user and user['password'] == password:
             session['user'] = email
             flash("Login successful!")
@@ -221,13 +220,12 @@ def delete_book(book_id):
     return redirect(url_for('admin'))
 
 # --- PASSWORD RECOVERY ---
-
-@app.route('/update_password', methods=['POST'])
-def update_password():
+@app.route('/forgot_password') # or whatever your route is
+def forgot_password():         # Change this name here!
     email = request.form.get('email')
     new_pwd = request.form.get('new_password')
     users_table.update_item(
-        Key={'email': email},
+        Key={'username': email},
         UpdateExpression="SET password = :p",
         ExpressionAttributeValues={':p': new_pwd}
     )
